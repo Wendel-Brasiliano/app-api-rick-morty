@@ -1,0 +1,25 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+body { background: #202329; color: white; padding: 15px; }
+header { text-align: center; margin-bottom: 20px; }
+h1 { color: #00b5cc; margin-bottom: 15px; }
+
+.search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+input { flex: 1; padding: 12px; border-radius: 5px; border: none; }
+button { padding: 12px 20px; background: #97ce4c; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+
+/* Grid Responsivo (Mobile First) */
+#results { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+    gap: 15px; 
+}
+
+.card { 
+    background: #3c3e44; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    text-align: center;
+    font-size: 0.9rem;
+}
+.card img { width: 100%; display: block; }
+.card p { padding: 10px; font-weight: bold; }
