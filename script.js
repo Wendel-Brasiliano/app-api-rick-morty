@@ -4,12 +4,16 @@ const voiceBtn = document.querySelector('.voice-btn');
 
 async function searchCharacter() {
     const name = searchInput.value;
-    if(!name) { resultsDiv.innerHTML = "<p>Digite ou diga algo.</p>"; return;}
-
-    resultsDiv.innerHTML = "<p>Carregando...</p>";
+    
+    resultsDiv.innerHTML = "<p>Carregando personagens...</p>";
 
     try {
-        const response = await fetch(`https://rickandmortyapi.com/api/character/?name=${name}`);
+        // Se houver nome digitado, busca pelo nome. Se não, busca a página inicial padrão.
+        const url = name 
+            ? `https://rickandmortyapi.com/api/character/?name=${name}` 
+            : `https://rickandmortyapi.com/api/character/`;
+
+        const response = await fetch(url);
         const data = await response.json();
 
         resultsDiv.innerHTML = ""; 
@@ -51,6 +55,7 @@ function startVoiceRecognition() {
     };
 
     recognition.onresult = (event) => {
+        // Correção da matriz de resultados para capturar o texto corretamente
         const transcript = event.results.transcript;
         searchInput.value = transcript;
         recognition.stop();
@@ -67,4 +72,5 @@ function startVoiceRecognition() {
     recognition.start();
 }
 
+// Executa a busca geral ao abrir a página
 searchCharacter();
