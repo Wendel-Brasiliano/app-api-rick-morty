@@ -8,7 +8,6 @@ async function searchCharacter() {
     resultsDiv.innerHTML = "<p>Carregando personagens...</p>";
 
     try {
-        // Se houver nome digitado, busca pelo nome. Se não, busca a página inicial padrão.
         const url = name 
             ? `https://rickandmortyapi.com/api/character/?name=${name}` 
             : `https://rickandmortyapi.com/api/character/`;
@@ -18,8 +17,13 @@ async function searchCharacter() {
 
         resultsDiv.innerHTML = ""; 
 
+        if (navigator.vibrate) {
+            navigator.vibrate(200); 
+        }
+
         if (!data.results) {
             resultsDiv.innerHTML = "<p>Personagem não encontrado.</p>";
+            if (navigator.vibrate) navigator.vibrate(); 
             return;
         }
 
@@ -33,6 +37,7 @@ async function searchCharacter() {
         });
     } catch (error) {
         resultsDiv.innerHTML = "<p>Erro na conexão ou personagem não encontrado.</p>";
+        if (navigator.vibrate) navigator.vibrate();
     }
 }
 
@@ -45,7 +50,8 @@ function startVoiceRecognition() {
     }
 
     const recognition = new SpeechRecognition();
-    recognition.lang = 'pt-BR';
+    
+    recognition.lang = 'en-US'; 
     recognition.continuous = false;
 
     recognition.onstart = () => {
@@ -55,8 +61,10 @@ function startVoiceRecognition() {
     };
 
     recognition.onresult = (event) => {
-        // Correção da matriz de resultados para capturar o texto corretamente
-        const transcript = event.results.transcript;
+        let transcript = event.results.transcript;
+        
+        transcript = transcript.replace(/[.,]/g, '').trim(); 
+        
         searchInput.value = transcript;
         recognition.stop();
         searchCharacter();
@@ -72,5 +80,4 @@ function startVoiceRecognition() {
     recognition.start();
 }
 
-// Executa a busca geral ao abrir a página
 searchCharacter();
