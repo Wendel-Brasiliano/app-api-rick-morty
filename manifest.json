@@ -1,0 +1,21 @@
+{
+  "name": "Rick and Morty Mobile Wiki",
+  "short_name": "R&M Wiki",
+  "description": "Busque personagens usando sua voz.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#202329",
+  "theme_color": "#8833ff",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

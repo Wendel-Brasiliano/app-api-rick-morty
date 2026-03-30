@@ -3,20 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rick and Morty Wiki - Mobile</title>
+    <meta name="description" content="Wiki móvel do Rick and Morty com busca por voz integrada.">
+    <meta name="theme-color" content="#202329">
+    <title>Rick & Morty Voice Wiki</title>
+    
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <h1>Rick & Morty</h1>
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Nome do personagem...">
-            <button onclick="searchCharacter()">Buscar</button>
+            <input type="text" id="searchInput" placeholder="Diga ou digite um nome..." aria-label="Campo de busca">
+            
+            <button class="voice-btn" onclick="startVoiceRecognition()" aria-label="Ativar busca por voz">
+                🎤
+            </button>
+            
+            <button class="search-btn" onclick="searchCharacter()" aria-label="Confirmar busca">
+                Buscar
+            </button>
         </div>
     </header>
 
     <main id="results"></main>
 
     <script src="script.js"></script>
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker registrado!'))
+                .catch(err => console.log('Erro no Service Worker:', err));
+        }
+    </script>
 </body>
 </html>

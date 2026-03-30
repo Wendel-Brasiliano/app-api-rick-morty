@@ -1,26 +1,70 @@
+const searchInput = document.getElementById('searchInput');
+const resultsDiv = document.getElementById('results');
+const voiceBtn = document.querySelector('.voice-btn');
+
 async function searchCharacter() {
-    const name = document.getElementById('searchInput').value;
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = "Carregando...";
+    const name = searchInput.value;
+    if(!name) { resultsDiv.innerHTML = "<p>Digite ou diga algo.</p>"; return;}
+
+    resultsDiv.innerHTML = "<p>Carregando...</p>";
 
     try {
         const response = await fetch(`https://rickandmortyapi.com/api/character/?name=${name}`);
         const data = await response.json();
 
-        resultsDiv.innerHTML = ""; // Limpa o carregando
+        resultsDiv.innerHTML = ""; 
+
+        if (!data.results) {
+            resultsDiv.innerHTML = "<p>Personagem não encontrado.</p>";
+            return;
+        }
 
         data.results.forEach(char => {
             resultsDiv.innerHTML += `
                 <div class="card">
-                    <img src="${char.image}" alt="${char.name}">
+                    <img src="${char.image}" alt="Personagem: ${char.name}" width="300" height="300">
                     <p>${char.name}</p>
                 </div>
             `;
         });
     } catch (error) {
-        resultsDiv.innerHTML = "Personagem não encontrado.";
+        resultsDiv.innerHTML = "<p>Erro na conexão ou personagem não encontrado.</p>";
     }
 }
 
-// Carregar iniciais ao abrir
+function startVoiceRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        alert("Desculpe, seu navegador não suporta busca por voz.");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'pt-BR';
+    recognition.continuous = false;
+
+    recognition.onstart = () => {
+        voiceBtn.textContent = "🛑";
+        voiceBtn.style.background = "#ff4444";
+        searchInput.placeholder = "Ouvindo...";
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results.transcript;
+        searchInput.value = transcript;
+        recognition.stop();
+        searchCharacter();
+    };
+
+    recognition.onerror = () => recognition.stop();
+    recognition.onend = () => {
+        voiceBtn.textContent = "🎤";
+        voiceBtn.style.background = "#ffcc00";
+        searchInput.placeholder = "Diga ou digite um nome...";
+    };
+
+    recognition.start();
+}
+
 searchCharacter();
